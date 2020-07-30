@@ -1,0 +1,39 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:11@sha256:85d79cba2d4942dad7c99f84ec389a5b9cc84fb07a3dcd3aff0fb06948cdc03b
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.5.8'
+
+      - name: Create Solr container
+        run: |
+          docker run -d --name collabra-solr -p 8981:8983 solr:5.3.1
+
+      - name: Build and run tests
+        env:
+          DATABASE_URL: postgres://postgres:@localhost:5432/test
+          POSTGRES_PASSWORD: postgres
+          RAILS_ENV: test
+
+        run: |
+          sudo apt-get -yqq install libpq-dev
+          gem install bundler:2.1.4
+          bundle install --jobs 4 --retry 3
+          curl -o - 'http://localhost:8981/solr/admin/cores?action=CREATE&name=test&configSet=basic_configs'
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+          bundle exec rspec spec
