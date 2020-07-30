@@ -21,7 +21,7 @@ jobs:
 
       - name: Create Solr container
         run: |
-          docker run -d --name collabra-solr -p 8981:8983 solr:5.3.1
+          docker run -d --name collabra-solr -p 8981:8983 mrjuangaviria/my-solr-image:1.0
 
       - name: Build and run tests
         env:
@@ -33,7 +33,7 @@ jobs:
           sudo apt-get -yqq install libpq-dev
           gem install bundler:2.1.4
           bundle install --jobs 4 --retry 3
-          curl -o - 'http://localhost:8981/solr/admin/cores?action=CREATE&name=test&configSet=basic_configs'
+          curl -o - 'http://localhost:8981/solr/admin/cores?action=CREATE&name=test&configSet=myconfig'
           bundle exec rake db:create
           bundle exec rake db:migrate
           bundle exec rspec spec
