@@ -1,0 +1,23 @@
+<% if @users.present? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Search Results</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.name %></td>
+          <td><%= link_to 'Show', user %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div>
+    <p>No results</p>
+  </div>
+<% end %>
