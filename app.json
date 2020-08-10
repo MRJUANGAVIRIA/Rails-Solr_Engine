@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "postdeploy": "bundle exec rake bootstrap"
+  }
+}
+
+{
+  "name": "Solr App",
+  "description": "The App deployable to Heroku.",
+  "keywords": [
+    "App",
+    "Heroku"
+  ],
+  "repository": "https://github.com/MRJUANGAVIRIA/Rails-Solr_Engine",
+  "scripts": {
+    "postdeploy": [
+        "bundle exec rake db:migrate"
+       ]
+  }
+}
