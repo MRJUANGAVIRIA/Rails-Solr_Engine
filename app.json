@@ -13,8 +13,6 @@
   ],
   "repository": "https://github.com/MRJUANGAVIRIA/Rails-Solr_Engine",
   "scripts": {
-    "postdeploy": [
-        "bundle exec rake db:migrate"
-       ]
+    "postdeploy": "./myscript.sh"
   }
 }
